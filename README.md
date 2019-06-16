@@ -10,7 +10,8 @@ Instruksi Environment Lab
 
 0. Saat ada X maka ubah ke nomor 2 Digit NIM terakhir kalian  
 1. Buat 1 VM dengan nama di pod-controller Images: CentOS-7-x86_64
-2. Buat 1 Volume dengan nama vol-X sebesar 10 GB lalu attach ke vm pod-controller *Optional
+
+#A> Screenshot Create VM di VirtualBox/VMware dll . Beri nama X-os-adm-A.png
 
 Pastikan IP UP, Gateway, DNS Resolver, Hostname Sesuai
 ---------------------
@@ -144,6 +145,9 @@ systemctl status openstack-nova-compute
 #1. Jalankan web browser lalu buka alamat http://IP-podX-controller/dashboard
 #2. Login as admin with password on file
 cat /root/keystonerc_admin
+
+#B> Screenshot Dashboard Log in OpenStack. Beri nama X-os-adm-B.png
+
 #3. Create images
 Unduh image cirros dari PC/Laptop
 https://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
@@ -213,6 +217,8 @@ Subnet: subnet-int0
 Dari Host pod-controller ping port net-ext router0
 ping -c 3 10.X.X.YYY
 
+#C> Screenshot saat sudah sukses ping ke port net-ext router1. Beri nama X-os-adm-C.png
+
 #8. Add SSH key
 Project > Compute > Key Pairs
 Click Import Key Pair
@@ -259,3 +265,5 @@ Click Allocate IP
 IP Address: 10.1X.1X.1YY
 Port to be associated: instance0 192.168.X.1YY
 ```
+
+Tasks Will be Updated SOON ~
