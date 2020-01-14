@@ -266,4 +266,92 @@ IP Address: 10.1X.1X.1YY
 Port to be associated: instance0 192.168.X.1YY
 ```
 
+
+###############
+##### CLI #####
+###############
+
+#12. Login as admin with password on file
+cat /root/keystonerc_admin
+source /root/keystonerc_admin
+
+#13. Create images
+openstack image list
+wget -c https://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img
+openstack image create --disk-format qcow2 --file cirros-0.4.0-x86_64-disk.img --protected --public cirros1
+openstack image list
+
+#14. Create external network [SKIP - langkah ini tidak perlu di Eksekusi]
+openstack network list
+neutron net-create net-ext --provider:network_type flat --provider:physical_network extnet --shared --router:external
+openstack network list
+
+#15. Create external subnet [SKIP - langkah ini tidak perlu di Eksekusi]
+openstack subnet list
+neutron subnet-create net-ext 10.1X.1X.0/24 --name subnet-ext --gateway 10.1X.1X.1 --disable-dhcp --allocation-pool start=10.1X.1X.100,end=10.1X.1X.199 --dns-nameserver 10.1X.1X.1
+openstack subnet list
+
+#16. Create internal network
+openstack network list
+openstack network create net-int1
+openstack network list
+
+#17. Create internal subnet
+openstack subnet list
+openstack subnet create --network net-int1 --subnet-range 192.168.1X.0/24 --gateway 192.168.1X.1 --allocation-pool start=192.168.1X.100,end=192.168.1X.199 --dns-nameserver 10.1X.1X.1 subnet-int1
+openstack subnet list
+openstack network list
+
+#18. Create router
+openstack router list
+openstack router create router1
+openstack router set --external-gateway net-ext router1
+openstack router add subnet router1 subnet-int1
+openstack router list
+openstack port list --router router1
+
+Dari Host podX-controller ping port net-ext router1
+ping -c 3 10.1X.1X.YYY
+
+#C> Screenshot saat sudah sukses ping ke port net-ext router1. Beri nama X-os-adm-C.png
+
+#19. Add SSH key
+openstack keypair list
+openstack keypair create --public-key /root/.ssh/id_rsa.pub key1
+openstack keypair list
+
+#20. Add security group rules
+openstack security group list
+openstack security group create sg1 --description 'my security group 1'
+openstack security group list
+openstack security group rule list sg1
+openstack security group rule create --proto tcp --dst-port 22 sg1
+openstack security group rule list sg1
+
+#21. Launch instance
+openstack server list
+openstack flavor list
+openstack image list
+openstack security group list
+openstack keypair list
+neutron net-list
+openstack server create --flavor m1.tiny --image cirros1 --key-name key1 --security-group sg1 --nic net-id=[copy paste ID net-int1] instance1
+openstack server list
+
+#22. Floating IP address
+openstack floating ip list
+openstack floating ip create net-ext
+openstack floating ip list
+openstack server list
+openstack server add floating ip instance1 10.1X.1X.YYY
+openstack server list
+openstack floating ip list
+
+#23 Verifikasi SSH ke instance1
+ssh -l cirros 10.1X.1X.YYY
+ip addr
+cat /etc/hostname
+
+
+
 Tasks Will be Updated SOON ~
