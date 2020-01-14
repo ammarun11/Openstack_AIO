@@ -264,8 +264,6 @@ Pool: net-ext
 Click Allocate IP
 IP Address: 10.1X.1X.1YY
 Port to be associated: instance0 192.168.X.1YY
-```
-
 
 ###############
 ##### CLI #####
@@ -351,7 +349,7 @@ openstack floating ip list
 ssh -l cirros 10.1X.1X.YYY
 ip addr
 cat /etc/hostname
-
+```
 
 
 Tasks Will be Updated SOON ~
